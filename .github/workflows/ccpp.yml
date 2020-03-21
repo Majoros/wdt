@@ -17,6 +17,8 @@ jobs:
       run: git clone https://github.com/facebook/folly.git
     - name: Build gflags
       run: git clone https://github.com/schuhschuh/gflags.git;
+           gcc --version;
+           cmake --version;
            mkdir gflags/build;
            mkdir wdt_gflags;
            cd gflags/build;
@@ -26,6 +28,7 @@ jobs:
     - name: Build glog
       run: git clone https://github.com/google/glog.git;
            cd glog;
+           ./autogen.sh;
            ./configure --with-gflags=~/src/wdt_gflags;
            make -j && sudo make install;
            cd ../
