@@ -1,0 +1,32 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: centos-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get Folly
+      run: git clone https://github.com/facebook/folly.git
+    - name: Build gflags
+      run: git clone https://github.com/schuhschuh/gflags.git
+           mkdir gflags/build
+           mkdir wdt_gflags
+           cd gflags/build
+           cmake -DGFLAGS_NAMESPACE=google -DBUILD_SHARED_LIBS=on -DCMAKE_INSTALL_PREFIX:PATH=~/src/wdt_gflags ..
+           make -j && sudo make install
+           cd ../
+    - name: Build glog
+      run: git clone https://github.com/google/glog.git
+           cd glog
+           ./configure --with-gflags=~/src/wdt_gflags
+           make -j && sudo make install
+           cd ../
+
